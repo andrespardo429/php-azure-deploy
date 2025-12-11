@@ -1,0 +1,32 @@
+name: Desplegar PHP a Azure App Service
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout del código
+      uses: actions/checkout@v4
+    
+    - name: Configurar PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+    
+    - name: Verificar archivos
+      run: |
+        echo "📁 Listando archivos del proyecto:"
+        ls -la
+    
+    - name: Desplegar a Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'phpappandre2025'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: .
